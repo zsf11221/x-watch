@@ -1,0 +1,1 @@
+export function parseUsername(input:string){const s=input.trim();const match=s.match(/^(?:https?:\/\/(?:www\.)?(?:x\.com|twitter\.com)\/|@)?([A-Za-z0-9_]{1,15})\/?(?:\?.*)?$/);return match?.[1]||null}
