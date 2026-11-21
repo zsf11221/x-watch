@@ -1,2 +1,0 @@
-import {db,fail} from '@/lib/config';export const dynamic='force-dynamic';
-export async function GET(){try{const c=db();const [a,p,u]=await Promise.all([c.from('accounts').select('id',{head:true,count:'exact'}),c.from('posts').select('id',{head:true,count:'exact'}),c.from('posts').select('id',{head:true,count:'exact'}).eq('status','unavailable')]);if(a.error||p.error||u.error)throw new Error('query');return Response.json({accounts:a.count||0,posts:p.count||0,unavailable:u.count||0},{headers:{'Cache-Control':'no-store'}})}catch{return fail('统计暂不可用',503)}}
