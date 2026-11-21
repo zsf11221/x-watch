@@ -41,3 +41,9 @@ begin
 end; $$;
 revoke all on function public.claim_add_slot(text) from public,anon,authenticated;
 grant execute on function public.claim_add_slot(text) to service_role;
+
+-- Existing projects created with automatic Data API grants disabled need explicit grants.
+grant usage on schema public to service_role;
+grant select, insert, update, delete on public.accounts, public.posts, public.events, public.add_slots to service_role;
+grant usage, select on all sequences in schema public to service_role;
+grant execute on function public.claim_add_slot(text) to service_role;
