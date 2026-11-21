@@ -31,13 +31,13 @@ alter table public.posts enable row level security;
 alter table public.events enable row level security;
 alter table public.add_slots enable row level security;
 create or replace function public.claim_add_slot(p_ip_hash text) returns boolean language plpgsql security definer set search_path = public as $$
-declare slot_ok boolean;
+declare affected_rows integer;
 begin
  insert into public.add_slots(ip_hash,last_added_at) values(p_ip_hash,now())
  on conflict(ip_hash) do update set last_added_at=excluded.last_added_at
  where public.add_slots.last_added_at < now()-interval '1 hour';
- get diagnostics slot_ok = row_count;
- return slot_ok;
+ get diagnostics affected_rows = row_count;
+ return affected_rows > 0;
 end; $$;
 revoke all on function public.claim_add_slot(text) from public,anon,authenticated;
 grant execute on function public.claim_add_slot(text) to service_role;
